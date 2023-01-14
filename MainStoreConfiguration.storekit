@@ -1,0 +1,75 @@
+{
+  "identifier" : "B9D87131",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "399.99",
+      "familyShareable" : false,
+      "internalID" : "6445420235",
+      "localizations" : [
+        {
+          "description" : "Our 2-week standard Restfully Care package.",
+          "displayName" : "Restfully Care Package",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "03",
+      "referenceName" : "Restfully Care Package",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "1664992674",
+    "_developerTeamID" : "98P5NU98KG",
+    "_lastSynchronizedDate" : 695425069.40060699
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "21146732",
+      "localizations" : [
+
+      ],
+      "name" : "TestGroup",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+            {
+              "internalID" : "137A4ACD",
+              "numberOfPeriods" : 1,
+              "offerID" : "01",
+              "paymentMode" : "free",
+              "referenceName" : "2 Week Trial",
+              "subscriptionPeriod" : "P2W"
+            }
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "29.99",
+          "familyShareable" : true,
+          "groupNumber" : 1,
+          "internalID" : "6445412337",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "The post-care Restfully support subscription.",
+              "displayName" : "Restfully Monthly Support",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "01",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "TestStandardSubscription",
+          "subscriptionGroupID" : "21146732",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 2,
+    "minor" : 0
+  }
+}

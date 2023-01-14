@@ -45,6 +45,7 @@
 		CB7D8B02297043580053B1A7 /* RFPlaygroundUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RFPlaygroundUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB7D8B06297043580053B1A7 /* RFPlaygroundUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RFPlaygroundUITests.swift; sourceTree = "<group>"; };
 		CB7D8B08297043580053B1A7 /* RFPlaygroundUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RFPlaygroundUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		CB7D8B15297350A30053B1A7 /* MainStoreConfiguration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = MainStoreConfiguration.storekit; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +76,7 @@
 		CB7D8ADE297043570053B1A7 = {
 			isa = PBXGroup;
 			children = (
+				CB7D8B15297350A30053B1A7 /* MainStoreConfiguration.storekit */,
 				CB7D8AE9297043570053B1A7 /* RFPlayground */,
 				CB7D8AFB297043580053B1A7 /* RFPlaygroundTests */,
 				CB7D8B05297043580053B1A7 /* RFPlaygroundUITests */,
