@@ -8,6 +8,40 @@
 import SwiftUI
 import StoreKit
 
+@MainActor
+class PurchaseManager: ObservableObject {
+    private let productIds = ["01","03"]
+    
+    @Published
+    private(set) var products: [Product] = []
+    private var productsLoaded = false
+    
+    func loadProducts() async throws {
+        guard !self.productsLoaded else { return }
+        self.products = try await Product.products(for: productIds)
+        self.productsLoaded = true
+    }
+    
+    func purchase(_ product: Product) async throws {
+        let result = try await product.purchase()
+        
+        switch result {
+        case let .success(.verified(transaction)):
+            await transaction.finish()
+        case .success(.unverified(_, _)):
+            break
+        case .userCancelled:
+            break
+        case .pending:
+            break
+        @unknown default:
+            break
+        }
+        
+    }
+    
+}
+
 struct ContentView: View {
     
     let productIds = ["01","03"]
@@ -22,7 +56,16 @@ struct ContentView: View {
             Text("Products")
             ForEach(self.products) { product in
                 Button(action: {
-                    // do nothing for now
+
+                    _ = Task<Void, Never> {
+                        do {
+                            try await self.purchase(product)
+                        } catch {
+                            print(error)
+                        }
+                    }
+
+
                 }, label: {
                     Text("\(product.displayName) - \(product.displayPrice)")
                 })
@@ -38,6 +81,24 @@ struct ContentView: View {
     
     private func loadProducts() async throws {
         self.products = try await Product.products(for: productIds)
+    }
+    
+    private func purchase(_ product: Product) async throws {
+        let result = try await product.purchase()
+        
+        switch result {
+        case let .success(.verified(transaction)):
+            await transaction.finish()
+        case .success(.unverified(_, _)):
+            break
+        case .userCancelled:
+            break
+        case .pending:
+            break
+        @unknown default:
+            break
+        }
+        
     }
     
 }
