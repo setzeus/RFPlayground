@@ -9,9 +9,14 @@ import SwiftUI
 
 @main
 struct RFPlaygroundApp: App {
+    
+    @StateObject private var purchaseManager = PurchaseManager()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView().environmentObject(purchaseManager).task {
+                await purchaseManager.updatePurchasedProducts()
+            }
         }
     }
 }

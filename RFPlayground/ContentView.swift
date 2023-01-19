@@ -10,11 +10,16 @@ import StoreKit
 
 @MainActor
 class PurchaseManager: ObservableObject {
-    private let productIds = ["01","03"]
     
-    @Published
-    private(set) var products: [Product] = []
+    private let productIds = ["01","03"]
     private var productsLoaded = false
+    
+    @Published private(set) var products: [Product] = []
+    @Published private(set) var purchasedProductIDs = Set<String>()
+    
+    var hasUnlockedPro: Bool {
+        return !self.purchasedProductIDs.isEmpty
+    }
     
     func loadProducts() async throws {
         guard !self.productsLoaded else { return }
@@ -28,6 +33,7 @@ class PurchaseManager: ObservableObject {
         switch result {
         case let .success(.verified(transaction)):
             await transaction.finish()
+            await self.updatePurchasedProducts()
         case .success(.unverified(_, _)):
             break
         case .userCancelled:
@@ -40,26 +46,42 @@ class PurchaseManager: ObservableObject {
         
     }
     
+    func updatePurchasedProducts() async {
+        for await result in Transaction.currentEntitlements {
+            guard case .verified(let transaction) = result else {
+                continue
+            }
+            
+            if transaction.revocationDate == nil {
+                self.purchasedProductIDs.insert(transaction.productID)
+            } else {
+                self.purchasedProductIDs.remove(transaction.productID)
+            }
+            
+        }
+    }
+    
 }
+
+
 
 struct ContentView: View {
     
-    let productIds = ["01","03"]
-
-    @State private var products: [Product] = []
-
-    //let products = try await Product.products(for: productIds)
+    @EnvironmentObject private var purchaseManager:PurchaseManager
 
     
     var body: some View {
         VStack(spacing: 20) {
+            
+            
             Text("Products")
-            ForEach(self.products) { product in
+            
+            ForEach(purchaseManager.products) { product in
                 Button(action: {
 
                     _ = Task<Void, Never> {
                         do {
-                            try await self.purchase(product)
+                            try await purchaseManager.purchase(product)
                         } catch {
                             print(error)
                         }
@@ -70,36 +92,19 @@ struct ContentView: View {
                     Text("\(product.displayName) - \(product.displayPrice)")
                 })
             }
+            
+            
         }.task {
-            do {
-                try await self.loadProducts()
-            } catch {
-                print(error)
+            Task {
+                do {
+                    try await purchaseManager.loadProducts()
+                } catch {
+                    print(error)
+                }
             }
         }
     }
-    
-    private func loadProducts() async throws {
-        self.products = try await Product.products(for: productIds)
-    }
-    
-    private func purchase(_ product: Product) async throws {
-        let result = try await product.purchase()
-        
-        switch result {
-        case let .success(.verified(transaction)):
-            await transaction.finish()
-        case .success(.unverified(_, _)):
-            break
-        case .userCancelled:
-            break
-        case .pending:
-            break
-        @unknown default:
-            break
-        }
-        
-    }
+
     
 }
 
