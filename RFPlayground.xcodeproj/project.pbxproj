@@ -14,6 +14,10 @@
 		CB7D8AFD297043580053B1A7 /* RFPlaygroundTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB7D8AFC297043580053B1A7 /* RFPlaygroundTests.swift */; };
 		CB7D8B07297043580053B1A7 /* RFPlaygroundUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB7D8B06297043580053B1A7 /* RFPlaygroundUITests.swift */; };
 		CB7D8B09297043580053B1A7 /* RFPlaygroundUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB7D8B08297043580053B1A7 /* RFPlaygroundUITestsLaunchTests.swift */; };
+		CBD477C9297EEA3100F714E1 /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD477C8297EEA3100F714E1 /* PurchaseManager.swift */; };
+		CBD477CB297EEBD400F714E1 /* TabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD477CA297EEBD400F714E1 /* TabView.swift */; };
+		CBD477CD297EEE7D00F714E1 /* PaymentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD477CC297EEE7D00F714E1 /* PaymentView.swift */; };
+		CBD477CF297EEEBB00F714E1 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD477CE297EEEBB00F714E1 /* MainView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +50,10 @@
 		CB7D8B06297043580053B1A7 /* RFPlaygroundUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RFPlaygroundUITests.swift; sourceTree = "<group>"; };
 		CB7D8B08297043580053B1A7 /* RFPlaygroundUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RFPlaygroundUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		CB7D8B15297350A30053B1A7 /* MainStoreConfiguration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = MainStoreConfiguration.storekit; sourceTree = "<group>"; };
+		CBD477C8297EEA3100F714E1 /* PurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManager.swift; sourceTree = "<group>"; };
+		CBD477CA297EEBD400F714E1 /* TabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabView.swift; sourceTree = "<group>"; };
+		CBD477CC297EEE7D00F714E1 /* PaymentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentView.swift; sourceTree = "<group>"; };
+		CBD477CE297EEEBB00F714E1 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +107,10 @@
 			children = (
 				CB7D8AEA297043570053B1A7 /* RFPlaygroundApp.swift */,
 				CB7D8AEC297043570053B1A7 /* ContentView.swift */,
+				CBD477CA297EEBD400F714E1 /* TabView.swift */,
+				CBD477CE297EEEBB00F714E1 /* MainView.swift */,
+				CBD477CC297EEE7D00F714E1 /* PaymentView.swift */,
+				CBD477C8297EEA3100F714E1 /* PurchaseManager.swift */,
 				CB7D8AEE297043580053B1A7 /* Assets.xcassets */,
 				CB7D8AF0297043580053B1A7 /* RFPlayground.entitlements */,
 				CB7D8AF1297043580053B1A7 /* Preview Content */,
@@ -262,6 +274,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB7D8AED297043570053B1A7 /* ContentView.swift in Sources */,
+				CBD477CF297EEEBB00F714E1 /* MainView.swift in Sources */,
+				CBD477C9297EEA3100F714E1 /* PurchaseManager.swift in Sources */,
+				CBD477CB297EEBD400F714E1 /* TabView.swift in Sources */,
+				CBD477CD297EEE7D00F714E1 /* PaymentView.swift in Sources */,
 				CB7D8AEB297043570053B1A7 /* RFPlaygroundApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

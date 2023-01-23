@@ -14,7 +14,7 @@ struct RFPlaygroundApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView().environmentObject(purchaseManager).task {
+            TabViewTest().environmentObject(purchaseManager).task {
                 await purchaseManager.updatePurchasedProducts()
             }
         }
