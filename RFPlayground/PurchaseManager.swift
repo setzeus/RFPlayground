@@ -9,8 +9,12 @@ import Foundation
 import SwiftUI
 import StoreKit
 
+
+
 @MainActor
 class PurchaseManager: ObservableObject {
+    
+    @AppStorage("didConsult") var didConsultStorage: Bool = false
     
     private let productIds = ["01","03"]
     private var productsLoaded = false
@@ -18,9 +22,11 @@ class PurchaseManager: ObservableObject {
     
     @Published private(set) var products: [Product] = []
     @Published private(set) var purchasedProductIDs = Set<String>()
+    @Published var didConsult = false
     
     init() {
         updates = observeTransactionUpdates()
+        didConsult = didConsultStorage
     }
     
     deinit {

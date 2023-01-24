@@ -17,7 +17,7 @@ struct TabViewTest: View {
             TabView {
                 ContentView()
                     .tabItem {
-                        Image(systemName: "list.bullet")
+                        Image(systemName: "star")
                 }
                 MainView()
                     .tabItem {
