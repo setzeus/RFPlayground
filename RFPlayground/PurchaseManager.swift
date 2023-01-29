@@ -15,6 +15,8 @@ import StoreKit
 class PurchaseManager: ObservableObject {
     
     @AppStorage("didConsult") var didConsultStorage: Bool = false
+    @AppStorage("didPurchase") var didPurchaseStorage: Bool = false
+    @AppStorage("didSubscribe") var didSubscribeStorage: Bool = false
     
     private let productIds = ["01","03"]
     private var productsLoaded = false
