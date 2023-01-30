@@ -13,6 +13,9 @@ struct ContentView: View {
     // 1. Never been a client -> can consult or purchase care package
     // 2. Never been a client -> can purchase care package
     // 3. Active client -> in care package
+    // 4. Active client -> in trial subscription
+    // 5.A Active client -> subscribed
+    // 5.B Not subscribed  -> re-subscribe button
     
     @EnvironmentObject private var purchaseManager:PurchaseManager
 
@@ -20,89 +23,143 @@ struct ContentView: View {
     var body: some View {
         VStack(spacing: 20) {
             
-            if !purchaseManager.didConsult {
+            if purchaseManager.purchasedProductIDs.isEmpty {
+                
+                if !purchaseManager.didConsult {
+                    Spacer()
+                    Text("Never Been A Client Nor Consulted")
+                        .fontWeight(.heavy)
+                        .font(.title2)
+                        .multilineTextAlignment(.center)
+                    Text("A new download that did not consult on the website & therefore has access to scheduling a single consult. \n \n Or of course they immediately buy the core Restfully Care package.")
+                        .multilineTextAlignment(.center)
+                    Spacer()
+                    Button(action: {
+                        purchaseManager.didConsultStorage = true
+                        purchaseManager.didConsult = true
+                    }, label: {
+                        Text("Sign Up For Consult")
+                            .foregroundColor(Color.white)
+                            .padding()
+                            .background(Color(red: 0, green: 0, blue: 0.5))
+                            .clipShape(Capsule())
+                    })
+                    ForEach(purchaseManager.products) { product in
+                        
+                        if product.id == "03" {
+                            Button(action: {
+
+                                _ = Task<Void, Never> {
+                                    do {
+                                        try await purchaseManager.purchase(product)
+                                    } catch {
+                                        print(error)
+                                    }
+                                }
+
+
+                            }, label: {
+                                
+                                Text("Restfully Care - \(product.displayPrice)")
+                                    .foregroundColor(Color.white)
+                                    .padding()
+                                    .background(Color(red: 0, green: 0.5, blue: 0))
+                                    .clipShape(Capsule())
+                            })
+                        }
+                        
+                    }
+                    Spacer()
+                } else {
+                    
+                    Spacer()
+                    Text("Never Been A Client, Has Consulted")
+                        .fontWeight(.heavy)
+                        .font(.title2)
+                        .multilineTextAlignment(.center)
+                    Text("A new download that has now done one consult either here or on the website & therefore can only buy the core Restfully Care package.")
+                        .multilineTextAlignment(.center)
+                    Spacer()
+                    ForEach(purchaseManager.products) { product in
+                        
+                        if product.id == "03" {
+                            Button(action: {
+
+                                _ = Task<Void, Never> {
+                                    do {
+                                        try await purchaseManager.purchase(product)
+                                    } catch {
+                                        print(error)
+                                    }
+                                }
+
+
+                            }, label: {
+                                
+                                Text("Restfully Care - \(product.displayPrice)")
+                                    .foregroundColor(Color.white)
+                                    .padding()
+                                    .background(Color(red: 0, green: 0.5, blue: 0))
+                                    .clipShape(Capsule())
+                            })
+                        }
+                        
+                    }
+                    Spacer()
+                    
+    //                if purchaseManager.hasUnlockedPro {
+    //                    Text("Thank you for purchasing pro!")
+    //                } else {
+    //                    Text("Products")
+    //
+    //                    ForEach(purchaseManager.products) { product in
+    //                        Button(action: {
+    //
+    //                            _ = Task<Void, Never> {
+    //                                do {
+    //                                    try await purchaseManager.purchase(product)
+    //                                } catch {
+    //                                    print(error)
+    //                                }
+    //                            }
+    //
+    //
+    //                        }, label: {
+    //                            Text("\(product.displayName) - \(product.displayPrice)")
+    //                        })
+    //                    }
+    //
+    //                    Button(action: {
+    //                        Task {
+    //                            do {
+    //                                try await AppStore.sync()
+    //                            } catch {
+    //                                print(error)
+    //                            }
+    //                        }
+    //                    }, label: {
+    //                        Text("Restore Purchases")
+    //                    })
+    //
+    //                }
+                    
+                }
+            } else {
                 Spacer()
-                Text("Never Been A Client Nor Consulted")
+                Text("Active Client - Core")
                     .fontWeight(.heavy)
                     .font(.title2)
                     .multilineTextAlignment(.center)
-                Text("A new download that did not consult on the website & therefore has access to scheduling a single consult. \n \n Or of course they immediately buy the core Restfully Care package.")
+                Text("An active client currently in the two-week Core program.")
                     .multilineTextAlignment(.center)
                 Spacer()
-                Button(action: {
-                    purchaseManager.didConsultStorage = true
-                    purchaseManager.didConsult = true
-                }, label: {
-                    Text("Sign Up For Consult")
-                        .foregroundColor(Color.white)
-                        .padding()
-                        .background(Color(red: 0, green: 0, blue: 0.5))
-                        .clipShape(Capsule())
-                })
-                ForEach(purchaseManager.products) { product in
-                    
-                    if product.id == "03" {
-                        Button(action: {
-
-                            _ = Task<Void, Never> {
-                                do {
-                                    try await purchaseManager.purchase(product)
-                                } catch {
-                                    print(error)
-                                }
-                            }
-
-
-                        }, label: {
-                            
-                            Text("Restfully Care - \(product.displayPrice)")
-                                .foregroundColor(Color.white)
-                                .padding()
-                                .background(Color(red: 0, green: 0.5, blue: 0))
-                                .clipShape(Capsule())
-                        })
-                    }
-                    
-                }
+                Text("Fast-Forward 2 Weeks")
+                    .foregroundColor(Color.white)
+                    .padding()
+                    .background(Color(red: 0, green: 0, blue: 0.5))
+                    .clipShape(Capsule())
                 Spacer()
-            } else {
-                if purchaseManager.hasUnlockedPro {
-                    Text("Thank you for purchasing pro!")
-                } else {
-                    Text("Products")
-                    
-                    ForEach(purchaseManager.products) { product in
-                        Button(action: {
-
-                            _ = Task<Void, Never> {
-                                do {
-                                    try await purchaseManager.purchase(product)
-                                } catch {
-                                    print(error)
-                                }
-                            }
-
-
-                        }, label: {
-                            Text("\(product.displayName) - \(product.displayPrice)")
-                        })
-                    }
-                    
-                    Button(action: {
-                        Task {
-                            do {
-                                try await AppStore.sync()
-                            } catch {
-                                print(error)
-                            }
-                        }
-                    }, label: {
-                        Text("Restore Purchases")
-                    })
-                    
-                }
             }
-            
             
         }.task {
             Task {
