@@ -46,21 +46,23 @@ struct MainView: View {
                 // Scrollview Body
                 ScrollView(.horizontal) {
                     
-                    HStack {
-                        
+                    
+                    // HStack -> all vertical columns
+                    // VStack -> vertical (day) column
+                    // Vstack -> fixed title (day)
+                    // Body -> hourly time slots
+                    HStack(spacing: 0) {
                         ForEach(daysDisplayed, id: \.self) { i in
-                            
-                            HStack(spacing: 0) {
                                 
                                 VStack {
                                     VStack {
                                         Text("\(staticWeekDay[i])")
                                             .fontWeight(.semibold)
-                                            .foregroundColor(.white)
+                                            .foregroundColor(.white).padding(.horizontal)
                                         Text("\(staticWeekNum[i])")
-                                            .foregroundColor(.white)
+                                            .foregroundColor(.white).padding(.horizontal)
                                         Divider().overlay(Color.white).frame(maxWidth: .infinity)
-                                    }.frame(height: 75)
+                                    }.frame(height: 60)
                                     ForEach(staticTimes, id: \.self) {time in
                                         if time == staticTimes[0] {
                                             Text("")
@@ -74,10 +76,9 @@ struct MainView: View {
                                     }
                                     
                                 }.padding(.top, 16)
-                                
-                            }
-
+                            
                         }
+                        
                     }
                     
                 }
