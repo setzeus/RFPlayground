@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MainView: View {
     
-    let staticTimes = ["6 a", "8 a", "10 a", "12 p", "2 p", "4 p", "6 p", "8 p", "10 p", "12 a", "2 a", "4 a"]
+    let staticTimes = ["6 a", "8 a", "10 a", "12 p", "2 p", "4 p", "6 p", "8 p", "10 p", "12 a", "2 a", "4 a", "6 a"]
     let staticWeekDay = ["Sun", "Sat", "Fri", "Thur", "Wed", "Tue", "Mon", "Sun", "Sat", "Fri"]
     let staticWeekNum = ["29", "28", "27", "26", "25", "24", "23", "22", "21", "20"]
     let daysDisplayed = [0,1,2,3,4,5,6,7,8,9]
@@ -19,7 +19,11 @@ struct MainView: View {
         
         VStack {
             Text("Calendar View").font(.title2)
+            
+            // Main Container
             HStack {
+                
+                // Legend
                 VStack {
                     VStack {
                         Text("Jan").fontWeight(.bold)
@@ -38,26 +42,42 @@ struct MainView: View {
                         }
                     }
                 }
+                
+                // Scrollview Body
                 ScrollView(.horizontal) {
                     
-                    ForEach(daysDisplayed, id: \.self) { i in
+                    HStack {
                         
-                        HStack(spacing: 20) {
-                                ForEach(0..<10) {
-                                    Text("Item \($0)")
-                                        .foregroundColor(.white)
-                                        .font(.largeTitle)
-                                        .background(.red)
-                                }
+                        ForEach(daysDisplayed, id: \.self) { i in
+                            
+                            HStack(spacing: 0) {
+                                
+                                VStack {
+                                    VStack {
+                                        Text("\(staticWeekDay[i])")
+                                            .fontWeight(.semibold)
+                                            .foregroundColor(.white)
+                                        Text("\(staticWeekNum[i])")
+                                            .foregroundColor(.white)
+                                        Divider().overlay(Color.white).frame(maxWidth: .infinity)
+                                    }.frame(height: 75)
+                                    ForEach(staticTimes, id: \.self) {time in
+                                        if time == staticTimes[0] {
+                                            Text("")
+                                            Divider().overlay(Color.white).frame(maxWidth: .infinity)
+                                        } else {
+                                            Spacer()
+                                            Text("")
+                                            Spacer()
+                                            Divider().overlay(Color.white).frame(maxWidth: .infinity)
+                                        }
+                                    }
+                                    
+                                }.padding(.top, 16)
+                                
                             }
-                        //Text(staticWeekDay[i]).fontWeight(.bold)
-//                        VStack {
-//                            VStack {
-//                                Text(staticWeekDay[i]).fontWeight(.bold)
-//                                Text(staticWeekNum[i]).fontWeight(.bold)
-//                            }.frame(height: 75)
-//                                .background(Color.red)
-//                        }
+
+                        }
                     }
                     
                 }
