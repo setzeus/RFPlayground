@@ -9,7 +9,14 @@ import Foundation
 import SwiftUI
 import StoreKit
 
-
+enum ClientStatus {
+    case neverConsulted,
+         neverBought,
+         activeCore,
+         activeSubscription,
+         inactiveSubscriptionShort,
+         inactiveSubscriptionLong
+}
 
 @MainActor
 class PurchaseManager: ObservableObject {
@@ -25,6 +32,7 @@ class PurchaseManager: ObservableObject {
     @Published private(set) var products: [Product] = []
     @Published private(set) var purchasedProductIDs = Set<String>()
     @Published var didConsult = false
+    @Published var status:ClientStatus = .neverConsulted
     
     init() {
         updates = observeTransactionUpdates()

@@ -23,6 +23,16 @@ struct ContentView: View {
     var body: some View {
         VStack(spacing: 20) {
             
+            switch purchaseManager.status {
+                
+                case .neverConsulted:
+                    Text("neverConsulted")
+                    
+                default:
+                    Text("test")
+                
+            }
+            
             if purchaseManager.purchasedProductIDs.isEmpty {
                 
                 if !purchaseManager.didConsult {
@@ -106,42 +116,6 @@ struct ContentView: View {
                         
                     }
                     Spacer()
-                    
-    //                if purchaseManager.hasUnlockedPro {
-    //                    Text("Thank you for purchasing pro!")
-    //                } else {
-    //                    Text("Products")
-    //
-    //                    ForEach(purchaseManager.products) { product in
-    //                        Button(action: {
-    //
-    //                            _ = Task<Void, Never> {
-    //                                do {
-    //                                    try await purchaseManager.purchase(product)
-    //                                } catch {
-    //                                    print(error)
-    //                                }
-    //                            }
-    //
-    //
-    //                        }, label: {
-    //                            Text("\(product.displayName) - \(product.displayPrice)")
-    //                        })
-    //                    }
-    //
-    //                    Button(action: {
-    //                        Task {
-    //                            do {
-    //                                try await AppStore.sync()
-    //                            } catch {
-    //                                print(error)
-    //                            }
-    //                        }
-    //                    }, label: {
-    //                        Text("Restore Purchases")
-    //                    })
-    //
-    //                }
                     
                 }
             } else {
