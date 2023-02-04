@@ -32,15 +32,18 @@ struct MainView: View {
                         .background(Color.red)
                     VStack {
                         ForEach(staticTimes, id: \.self) {time in
-                            if time == staticTimes[0] {
-                                Text(time)
-                            } else {
-                                Spacer()
-                                Text(time)
-                                Spacer()
-                            }
+                            Text(time)
+                                .frame(height: 33)
+//                            if time == staticTimes[0] {
+//                                Text(time)
+//                            } else {
+//                                Spacer()
+//                                Text(time)
+//                                Spacer()
+//                            }
                         }
                     }
+                    Spacer()
                 }
                 
                 // Scrollview Body
@@ -54,7 +57,9 @@ struct MainView: View {
                     HStack(spacing: 0) {
                         ForEach(daysDisplayed, id: \.self) { i in
                                 
-                                VStack {
+                            VStack(spacing: 0) {
+                                    
+                                    
                                     VStack {
                                         Text("\(staticWeekDay[i])")
                                             .fontWeight(.semibold)
@@ -62,18 +67,28 @@ struct MainView: View {
                                         Text("\(staticWeekNum[i])")
                                             .foregroundColor(.white).padding(.horizontal)
                                         Divider().overlay(Color.white).frame(maxWidth: .infinity)
-                                    }.frame(height: 60)
+                                    }.frame(height: 50)
+                                    
                                     ForEach(staticTimes, id: \.self) {time in
-                                        if time == staticTimes[0] {
-                                            Text("")
-                                            Divider().overlay(Color.white).frame(maxWidth: .infinity)
-                                        } else {
+                                        VStack(spacing: 0) {
                                             Spacer()
-                                            Text("")
+                                            Rectangle().fill(.red).frame(height: 16.5)
                                             Spacer()
                                             Divider().overlay(Color.white).frame(maxWidth: .infinity)
-                                        }
+                                        }.frame(height: 33)
+//                                        if time == staticTimes[0] {
+//                                            Text("")
+//                                            Divider().overlay(Color.white).frame(maxWidth: .infinity)
+//                                        } else {
+//                                            Spacer()
+//                                            Text("")
+//                                            Spacer()
+//                                            Divider().overlay(Color.white).frame(maxWidth: .infinity)
+//                                        }
                                     }
+                                    
+                                    Spacer()
+                                    
                                     
                                 }.padding(.top, 16)
                             
@@ -82,6 +97,7 @@ struct MainView: View {
                     }
                     
                 }
+                Spacer()
             }.frame(maxHeight: .infinity)
                 .background(Color.blue)
                 .padding(.bottom, 24)
