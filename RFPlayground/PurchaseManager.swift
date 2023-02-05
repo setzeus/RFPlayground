@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import StoreKit
 
-enum ClientStatus {
+enum ClientStatus: String, Codable {
     case neverConsulted,
          neverBought,
          activeCore,
@@ -22,6 +22,7 @@ enum ClientStatus {
 @MainActor
 class PurchaseManager: ObservableObject {
     
+    @AppStorage("statusStorage") var statusStorage:ClientStatus = .neverConsulted
     @AppStorage("didConsult") var didConsultStorage: Bool = false
     @AppStorage("didPurchase") var didPurchaseStorage: Bool = false
     @AppStorage("didSubscribe") var didSubscribeStorage: Bool = false
@@ -36,6 +37,8 @@ class PurchaseManager: ObservableObject {
     @Published var status:ClientStatus = .neverConsulted
     
     init() {
+        
+        status = statusStorage  
         
         updates = observeTransactionUpdates()
         if !didConsultStorage && !didPurchaseStorage {
@@ -99,6 +102,7 @@ class PurchaseManager: ObservableObject {
     
     func updateClientStatus(newStatus:ClientStatus) {
         status = newStatus
+        statusStorage = status
     }
     
     private func observeTransactionUpdates() -> Task<Void, Never> {
