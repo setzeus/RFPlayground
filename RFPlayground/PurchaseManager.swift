@@ -15,7 +15,8 @@ enum ClientStatus {
          activeCore,
          activeSubscription,
          inactiveSubscriptionShort,
-         inactiveSubscriptionLong
+         inactiveSubscriptionLong,
+         graceSubscription
 }
 
 @MainActor
@@ -35,8 +36,13 @@ class PurchaseManager: ObservableObject {
     @Published var status:ClientStatus = .neverConsulted
     
     init() {
+        
         updates = observeTransactionUpdates()
-        didConsult = didConsultStorage
+        if !didConsultStorage && !didPurchaseStorage {
+            status = .neverConsulted
+        } else if didConsultStorage && !didPurchaseStorage {
+            status = .neverBought
+        }
     }
     
     deinit {
