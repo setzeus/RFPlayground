@@ -26,90 +26,10 @@ struct ContentView: View {
             switch purchaseManager.status {
                 
                 case .neverConsulted:
-                    VStack {
-                        Spacer()
-                        Text("Never Been A Client Nor Consulted")
-                            .fontWeight(.heavy)
-                            .font(.title2)
-                            .multilineTextAlignment(.center)
-                        Text("A new download that did not consult on the website & therefore has access to scheduling a single consult. \n \n Or of course they immediately buy the core Restfully Care package.")
-                            .multilineTextAlignment(.center)
-                        Spacer()
-                        Button(action: {
-                            purchaseManager.didConsultStorage = true
-                            //zpurchaseManager.didConsult = true
-                        }, label: {
-                            Text("Sign Up For Consult")
-                                .foregroundColor(Color.white)
-                                .padding()
-                                .background(Color(red: 0, green: 0, blue: 0.5))
-                                .clipShape(Capsule())
-                        })
-                        ForEach(purchaseManager.products) { product in
-                            
-                            if product.id == "03" {
-                                Button(action: {
-
-                                    _ = Task<Void, Never> {
-                                        do {
-                                            try await purchaseManager.purchase(product)
-                                        } catch {
-                                            print(error)
-                                        }
-                                    }
-
-
-                                }, label: {
-                                    
-                                    Text("Restfully Care - \(product.displayPrice)")
-                                        .foregroundColor(Color.white)
-                                        .padding()
-                                        .background(Color(red: 0, green: 0.5, blue: 0))
-                                        .clipShape(Capsule())
-                                })
-                            }
-                            
-                        }
-                        Spacer()
-                    }
+                    NeverConsultedView(purchaseManager: purchaseManager)
                 
                 case .neverBought:
-                    VStack {
-                        Spacer()
-                        Text("Never Been A Client, Has Consulted")
-                            .fontWeight(.heavy)
-                            .font(.title2)
-                            .multilineTextAlignment(.center)
-                        Text("A new download that has now done one consult either here or on the website & therefore can only buy the core Restfully Care package.")
-                            .multilineTextAlignment(.center)
-                        Spacer()
-                        ForEach(purchaseManager.products) { product in
-                            
-                            if product.id == "03" {
-                                Button(action: {
-
-                                    _ = Task<Void, Never> {
-                                        do {
-                                            try await purchaseManager.purchase(product)
-                                        } catch {
-                                            print(error)
-                                        }
-                                    }
-
-
-                                }, label: {
-                                    
-                                    Text("Restfully Care - \(product.displayPrice)")
-                                        .foregroundColor(Color.white)
-                                        .padding()
-                                        .background(Color(red: 0, green: 0.5, blue: 0))
-                                        .clipShape(Capsule())
-                                })
-                            }
-                            
-                        }
-                        Spacer()
-                    }
+                    ConsultedNeverBoughtView(purchaseManager: purchaseManager)
                         
                 case .activeCore:
                     VStack {
@@ -157,6 +77,106 @@ struct ContentView: View {
         }
     }
 
+    
+}
+
+struct NeverConsultedView: View {
+    
+    @ObservedObject var purchaseManager:PurchaseManager
+    
+    var body: some View {
+        VStack {
+            Spacer()
+            Text("Never Been A Client Nor Consulted")
+                .fontWeight(.heavy)
+                .font(.title2)
+                .multilineTextAlignment(.center)
+            Text("A new download that did not consult on the website & therefore has access to scheduling a single consult. \n \n Or of course they immediately buy the core Restfully Care package.")
+                .multilineTextAlignment(.center)
+            Spacer()
+            Button(action: {
+                purchaseManager.didConsultStorage = true
+                //zpurchaseManager.didConsult = true
+            }, label: {
+                Text("Sign Up For Consult")
+                    .foregroundColor(Color.white)
+                    .padding()
+                    .background(Color(red: 0, green: 0, blue: 0.5))
+                    .clipShape(Capsule())
+            })
+            ForEach(purchaseManager.products) { product in
+                
+                if product.id == "03" {
+                    Button(action: {
+
+                        _ = Task<Void, Never> {
+                            do {
+                                try await purchaseManager.purchase(product)
+                            } catch {
+                                print(error)
+                            }
+                        }
+
+
+                    }, label: {
+                        
+                        Text("Restfully Care - \(product.displayPrice)")
+                            .foregroundColor(Color.white)
+                            .padding()
+                            .background(Color(red: 0, green: 0.5, blue: 0))
+                            .clipShape(Capsule())
+                    })
+                }
+                
+            }
+            Spacer()
+        }
+    }
+    
+}
+
+struct ConsultedNeverBoughtView: View {
+    
+    @ObservedObject var purchaseManager:PurchaseManager
+    
+    var body: some View {
+        VStack {
+            Spacer()
+            Text("Never Been A Client, Has Consulted")
+                .fontWeight(.heavy)
+                .font(.title2)
+                .multilineTextAlignment(.center)
+            Text("A new download that has now done one consult either here or on the website & therefore can only buy the core Restfully Care package.")
+                .multilineTextAlignment(.center)
+            Spacer()
+            ForEach(purchaseManager.products) { product in
+                
+                if product.id == "03" {
+                    Button(action: {
+
+                        _ = Task<Void, Never> {
+                            do {
+                                try await purchaseManager.purchase(product)
+                            } catch {
+                                print(error)
+                            }
+                        }
+
+
+                    }, label: {
+                        
+                        Text("Restfully Care - \(product.displayPrice)")
+                            .foregroundColor(Color.white)
+                            .padding()
+                            .background(Color(red: 0, green: 0.5, blue: 0))
+                            .clipShape(Capsule())
+                    })
+                }
+                
+            }
+            Spacer()
+        }
+    }
     
 }
 

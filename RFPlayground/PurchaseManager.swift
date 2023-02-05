@@ -93,6 +93,10 @@ class PurchaseManager: ObservableObject {
         }
     }
     
+    func updateClientStatus(newStatus:ClientStatus) {
+        
+    }
+    
     private func observeTransactionUpdates() -> Task<Void, Never> {
         Task(priority: .background) { [unowned self] in
             for await verficationResult in Transaction.updates {
