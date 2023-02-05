@@ -66,6 +66,10 @@ class PurchaseManager: ObservableObject {
         case let .success(.verified(transaction)):
             await transaction.finish()
             await self.updatePurchasedProducts()
+            if product.id == "03" {
+                didPurchaseStorage = true
+                updateClientStatus(newStatus: .activeCore)
+            }
         case .success(.unverified(_, _)):
             break
         case .userCancelled:
@@ -94,7 +98,7 @@ class PurchaseManager: ObservableObject {
     }
     
     func updateClientStatus(newStatus:ClientStatus) {
-        
+        status = newStatus
     }
     
     private func observeTransactionUpdates() -> Task<Void, Never> {

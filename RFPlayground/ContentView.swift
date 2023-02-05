@@ -96,6 +96,7 @@ struct NeverConsultedView: View {
             Spacer()
             Button(action: {
                 purchaseManager.didConsultStorage = true
+                purchaseManager.updateClientStatus(newStatus: .neverBought)
                 //zpurchaseManager.didConsult = true
             }, label: {
                 Text("Sign Up For Consult")
