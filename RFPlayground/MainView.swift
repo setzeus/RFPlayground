@@ -9,10 +9,13 @@ import SwiftUI
 
 struct MainView: View {
     
+    @State var calendarDays:[Date] = [Date(),Date(),Date(),Date(),Date(),Date(),Date(),Date(),Date(),Date(),Date(),Date(),Date(),Date()]
+    @State var calendarDaysE:[String] = Array(repeating: "", count: 14)
+    @State var calendarDaysD:[String] = Array(repeating: "", count: 14)
     let staticTimes = ["6 a", "8 a", "10 a", "12 p", "2 p", "4 p", "6 p", "8 p", "10 p", "12 a", "2 a", "4 a", "6 a"]
     let staticWeekDay = ["Sun", "Sat", "Fri", "Thur", "Wed", "Tue", "Mon", "Sun", "Sat", "Fri"]
     let staticWeekNum = ["29", "28", "27", "26", "25", "24", "23", "22", "21", "20"]
-    let daysDisplayed = [0,1,2,3,4,5,6,7,8,9]
+    let daysDisplayed = [0,1,2,3,4,5,6,7,8,9,10,11,12,13]
     let twoHourContainerHeight = 45
     
     var body: some View {
@@ -54,10 +57,10 @@ struct MainView: View {
                                     
                                     
                                     VStack {
-                                        Text("\(staticWeekDay[i])")
+                                        Text("\(calendarDaysE[i])")
                                             .fontWeight(.semibold)
                                             .foregroundColor(.white).padding(.horizontal)
-                                        Text("\(staticWeekNum[i])")
+                                        Text("\(calendarDaysD[i])")
                                             .foregroundColor(.white).padding(.horizontal)
                                         Divider().overlay(Color.white).frame(maxWidth: .infinity)
                                     }.frame(height: 50)
@@ -88,6 +91,18 @@ struct MainView: View {
             }.frame(maxHeight: .infinity)
                 .background(Color.blue)
                 .padding(.bottom, 24)
+        }.onAppear {
+            let today = Date()
+            let calendar = Calendar.current
+            let dateFormatterE = DateFormatter()
+            dateFormatterE.dateFormat = "E"
+            let dateFormatterD = DateFormatter()
+            dateFormatterD.dateFormat = "d"
+            for i in 0...13 {
+                calendarDays[i] = calendar.date(byAdding: .day, value: -i, to: today) ?? Date()
+                calendarDaysE[i] = dateFormatterE.string(from: calendarDays[i])
+                calendarDaysD[i] = dateFormatterD.string(from: calendarDays[i])
+            }
         }
     }
 }
