@@ -41,11 +41,15 @@ struct ContentView: View {
                         Text("An active client currently in the two-week Core program.")
                             .multilineTextAlignment(.center)
                         Spacer()
-                        Text("Fast-Forward 2 Weeks")
-                            .foregroundColor(Color.white)
-                            .padding()
-                            .background(Color(red: 0, green: 0, blue: 0.5))
-                            .clipShape(Capsule())
+                        Button(action: {
+                            purchaseManager.updateClientStatus(newStatus: .inactiveSubscriptionShort)
+                        }, label: {
+                            Text("Fast-Forward 2 Weeks / Complete Core")
+                                .foregroundColor(Color.white)
+                                .padding()
+                                .background(Color(red: 0, green: 0, blue: 0.5))
+                                .clipShape(Capsule())
+                        })
                         Spacer()
                     }
                     
@@ -53,7 +57,7 @@ struct ContentView: View {
                     Text("active in subscription")
                     
                 case .inactiveSubscriptionShort:
-                    Text("Inactive client, less than 3 months")
+                    Text("Inactive client, either just finished core or was recent subcriber < 3 months ago")
                     
                 case .inactiveSubscriptionLong:
                     Text("Inactive client, more than 3 months")

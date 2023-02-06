@@ -38,7 +38,7 @@ class PurchaseManager: ObservableObject {
     
     init() {
         
-        status = statusStorage  
+        status = statusStorage
         
         updates = observeTransactionUpdates()
         if !didConsultStorage && !didPurchaseStorage {
@@ -46,6 +46,9 @@ class PurchaseManager: ObservableObject {
         } else if didConsultStorage && !didPurchaseStorage {
             status = .neverBought
         }
+        
+        //let promoOffers = await storeProduct.getEligiblePromotionalOffers()
+        
     }
     
     deinit {
@@ -90,6 +93,8 @@ class PurchaseManager: ObservableObject {
             guard case .verified(let transaction) = result else {
                 continue
             }
+            
+            print(transaction.productID)
             
             if transaction.revocationDate == nil {
                 self.purchasedProductIDs.insert(transaction.productID)

@@ -68,6 +68,7 @@ struct MainView: View {
                                             TwoHourContainerView(twoHourContainerHeight: CGFloat(twoHourContainerHeight))
                                             
                                         } else {
+                                            Divider().overlay(Color.white).frame(height: 0.1)
                                             TwoHourContainerView(twoHourContainerHeight: CGFloat(twoHourContainerHeight))
                                             Divider().overlay(Color.white).frame(height: 0.1)
                                         }
