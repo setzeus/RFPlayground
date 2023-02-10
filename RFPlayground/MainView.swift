@@ -12,7 +12,7 @@ struct MainView: View {
     @State var calendarDays:[Date] = [Date(),Date(),Date(),Date(),Date(),Date(),Date(),Date(),Date(),Date(),Date(),Date(),Date(),Date()]
     @State var calendarDaysE:[String] = Array(repeating: "", count: 14)
     @State var calendarDaysD:[String] = Array(repeating: "", count: 14)
-    let staticTimes = ["6 a", "8 a", "10 a", "12 p", "2 p", "4 p", "6 p", "8 p", "10 p", "12 a", "2 a", "4 a", "6 a"]
+    let staticTimes = [0,2,4,6,8,10,12,14,16,18,20,22]
     let staticWeekDay = ["Sun", "Sat", "Fri", "Thur", "Wed", "Tue", "Mon", "Sun", "Sat", "Fri"]
     let staticWeekNum = ["29", "28", "27", "26", "25", "24", "23", "22", "21", "20"]
     let daysDisplayed = [0,1,2,3,4,5,6,7,8,9,10,11,12,13]
@@ -30,13 +30,13 @@ struct MainView: View {
                 // Legend
                 VStack(spacing: 0) {
                     VStack {
-                        Text("Jan").fontWeight(.bold)
+                        Text("Feb").fontWeight(.bold)
                         Text("2023").fontWeight(.bold)
                     }.frame(height: 46)
                         .background(Color.red)
                     VStack(spacing: 0) {
-                        ForEach(staticTimes, id: \.self) {time in
-                            Text(time).foregroundColor(Color.white).frame(height: CGFloat(twoHourContainerHeight))
+                        ForEach(Array(staticTimes.enumerated()), id: \.offset) { index, element in
+                            Text(PurchaseManager().hoursLater(startDate: Date(), hoursLater: element)).foregroundColor(Color.white).frame(height: CGFloat(twoHourContainerHeight))
                         }
                     }
                     Spacer()
@@ -68,11 +68,11 @@ struct MainView: View {
                                     // 2 Hour Container
                                     ForEach(staticTimes, id: \.self) {time in
                                         if time == staticTimes.last {
-                                            TwoHourContainerView(twoHourContainerHeight: CGFloat(twoHourContainerHeight))
+                                            TwoHourContainerView(twoHourContainerHeight: CGFloat(twoHourContainerHeight), twoHourStartTime: Date())
                                             
                                         } else {
                                             Divider().overlay(Color.white).frame(height: 0.1)
-                                            TwoHourContainerView(twoHourContainerHeight: CGFloat(twoHourContainerHeight))
+                                            TwoHourContainerView(twoHourContainerHeight: CGFloat(twoHourContainerHeight), twoHourStartTime: Date())
                                             Divider().overlay(Color.white).frame(height: 0.1)
                                         }
                                     }
@@ -116,7 +116,8 @@ struct MainView_Previews: PreviewProvider {
 struct TwoHourContainerView: View {
     
     let twoHourContainerHeight:CGFloat
-    @State var sectionFills:[Bool] = [false,false,false,false,false,false,false,false]
+    let twoHourStartTime:Date
+    @State var sectionFills:[Bool] = [true,true,true,true,true,true,true,true]
     
     var body: some View {
         // 2 Hour Container
@@ -127,22 +128,22 @@ struct TwoHourContainerView: View {
                 VStack(spacing: 0) {
                     // 15 Min Container 1
                     VStack(spacing: 0) {
-                        Rectangle().fill(sectionFills[0] == true ? .purple : .clear).frame(height: CGFloat(twoHourContainerHeight)/8)
+                        Rectangle().fill(sectionFills[0] == true ? .black : .clear).frame(height: CGFloat(twoHourContainerHeight)/8)
                     }
                     // 15 Min Container 2
                     VStack(spacing: 0) {
-                        Rectangle().fill(sectionFills[1] == true ? .purple : .clear).frame(height: CGFloat(twoHourContainerHeight)/8)
+                        Rectangle().fill(sectionFills[1] == true ? .brown : .clear).frame(height: CGFloat(twoHourContainerHeight)/8)
                     }
                 }.frame(height: CGFloat(twoHourContainerHeight)/4)
                 // 30 Min Container
                 VStack(spacing: 0) {
                     // 15 Min Container 3
                     VStack(spacing: 0) {
-                        Rectangle().fill(sectionFills[2] == true ? .purple : .clear).frame(height: CGFloat(twoHourContainerHeight)/8)
+                        Rectangle().fill(sectionFills[2] == true ? .cyan : .clear).frame(height: CGFloat(twoHourContainerHeight)/8)
                     }
                     // 15 Min Container 4
                     VStack(spacing: 0) {
-                        Rectangle().fill(sectionFills[3] == true ? .purple : .clear).frame(height: CGFloat(twoHourContainerHeight)/8)
+                        Rectangle().fill(sectionFills[3] == true ? .yellow : .clear).frame(height: CGFloat(twoHourContainerHeight)/8)
                     }
                 }.frame(height: CGFloat(twoHourContainerHeight)/4)
             }.frame(height: CGFloat(twoHourContainerHeight)/2)
@@ -152,7 +153,7 @@ struct TwoHourContainerView: View {
                 VStack(spacing: 0) {
                     // 15 Min Container 5
                     VStack(spacing: 0) {
-                        Rectangle().fill(sectionFills[4] == true ? .purple : .clear).frame(height: CGFloat(twoHourContainerHeight)/8)
+                        Rectangle().fill(sectionFills[4] == true ? .pink : .clear).frame(height: CGFloat(twoHourContainerHeight)/8)
                     }
                     // 15 Min Container 6
                     VStack(spacing: 0) {
@@ -163,11 +164,11 @@ struct TwoHourContainerView: View {
                 VStack(spacing: 0) {
                     // 15 Min Container 7
                     VStack(spacing: 0) {
-                        Rectangle().fill(sectionFills[6] == true ? .purple : .clear).frame(height: CGFloat(twoHourContainerHeight)/8)
+                        Rectangle().fill(sectionFills[6] == true ? .red : .clear).frame(height: CGFloat(twoHourContainerHeight)/8)
                     }
                     // 15 Min Container 8
                     VStack(spacing: 0) {
-                        Rectangle().fill(sectionFills[7] == true ? .purple : .clear).frame(height: CGFloat(twoHourContainerHeight)/8)
+                        Rectangle().fill(sectionFills[7] == true ? .orange : .clear).frame(height: CGFloat(twoHourContainerHeight)/8)
                     }
                 }.frame(height: CGFloat(twoHourContainerHeight)/4)
             }.frame(height: CGFloat(twoHourContainerHeight)/2)

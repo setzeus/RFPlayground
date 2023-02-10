@@ -32,19 +32,90 @@ struct ContentView: View {
                     ConsultedNeverBoughtView(purchaseManager: purchaseManager)
                         
                 case .activeCore:
+                
+                if !purchaseManager.check20Secs(purchaseDate: purchaseManager.datePurchased) {
+                        VStack {
+                            Spacer()
+                            Text("Active Client - Core")
+                                .fontWeight(.heavy)
+                                .font(.title2)
+                                .multilineTextAlignment(.center)
+                            Text("An active client currently in the two-week Core program.")
+                                .multilineTextAlignment(.center)
+                            Spacer()
+                            Button(action: {
+                                purchaseManager.updateClientStatus(newStatus: .inactiveSubscriptionShort)
+                            }, label: {
+                                Text("Fast-Forward 2 Weeks / Complete Core")
+                                    .foregroundColor(Color.white)
+                                    .padding()
+                                    .background(Color(red: 0, green: 0, blue: 0.5))
+                                    .clipShape(Capsule())
+                            })
+                            Spacer()
+                        }
+                    } else {
+                        VStack {
+                            Spacer()
+                            Text("Active Client - Core Ended")
+                                .fontWeight(.heavy)
+                                .font(.title2)
+                                .multilineTextAlignment(.center)
+                            Text("An active client with a core program that just ended. ")
+                                .multilineTextAlignment(.center)
+                            Spacer()
+                            ForEach(purchaseManager.products) { product in
+                                
+                                if product.id == "01" {
+                                    Button(action: {
+
+                                        _ = Task<Void, Never> {
+                                            do {
+                                                try await purchaseManager.purchase(product)
+                                            } catch {
+                                                print(error)
+                                            }
+                                        }
+
+
+                                    }, label: {
+                                        
+                                        Text("Restfully Support - $30/Mo")
+                                            .foregroundColor(Color.white)
+                                            .padding()
+                                            .background(Color(red: 0, green: 0.5, blue: 0))
+                                            .clipShape(Capsule())
+                                    })
+                                }
+                                
+                            }
+                            Button(action: {
+                                purchaseManager.updateClientStatus(newStatus: .inactiveSubscriptionShort)
+                            }, label: {
+                                Text("Not Now, Thanks")
+                                    .foregroundColor(Color.white)
+                                    .padding()
+                                    .background(Color(red: 0.5, green: 0, blue: 0))
+                                    .clipShape(Capsule())
+                            })
+                            Spacer()
+                        }
+                    }
+                    
+                case .activeSubscription:
                     VStack {
                         Spacer()
-                        Text("Active Client - Core")
+                        Text("Active Subscription")
                             .fontWeight(.heavy)
                             .font(.title2)
                             .multilineTextAlignment(.center)
-                        Text("An active client currently in the two-week Core program.")
+                        Text("An active monthly subscription. For testing reasons this subscription is set to 20 secs.")
                             .multilineTextAlignment(.center)
                         Spacer()
                         Button(action: {
                             purchaseManager.updateClientStatus(newStatus: .inactiveSubscriptionShort)
                         }, label: {
-                            Text("Fast-Forward 2 Weeks / Complete Core")
+                            Text("Fast-Forward A Month")
                                 .foregroundColor(Color.white)
                                 .padding()
                                 .background(Color(red: 0, green: 0, blue: 0.5))
@@ -53,11 +124,36 @@ struct ContentView: View {
                         Spacer()
                     }
                     
-                case .activeSubscription:
-                    Text("active in subscription")
-                    
                 case .inactiveSubscriptionShort:
-                    Text("Inactive client, either just finished core or was recent subcriber < 3 months ago")
+                    VStack {
+                        Spacer()
+                        Text("Inactive Client")
+                            .fontWeight(.heavy)
+                            .font(.title2)
+                            .multilineTextAlignment(.center)
+                        Text("Either just finished core or was recent subcriber < 3 months ago")
+                            .multilineTextAlignment(.center)
+                        Spacer()
+                        Button(action: {
+                            purchaseManager.updateClientStatus(newStatus: .inactiveSubscriptionShort)
+                        }, label: {
+                            Text("Fast-Forward A Quarter")
+                                .foregroundColor(Color.white)
+                                .padding()
+                                .background(Color(red: 0, green: 0, blue: 0.5))
+                                .clipShape(Capsule())
+                        })
+                        Button(action: {
+                            purchaseManager.updateClientStatus(newStatus: .inactiveSubscriptionShort)
+                        }, label: {
+                            Text("Resubscribe")
+                                .foregroundColor(Color.white)
+                                .padding()
+                                .background(Color(red: 0, green: 0, blue: 0.5))
+                                .clipShape(Capsule())
+                        })
+                        Spacer()
+                    }
                     
                 case .inactiveSubscriptionLong:
                     Text("Inactive client, more than 3 months")

@@ -25,6 +25,8 @@ class PurchaseManager: ObservableObject {
     @AppStorage("statusStorage") var statusStorage:ClientStatus = .neverConsulted
     @AppStorage("didConsult") var didConsultStorage: Bool = false
     @AppStorage("didPurchase") var didPurchaseStorage: Bool = false
+    @AppStorage("purchaseDate") var datePurchased:String = Date().ISO8601Format()
+    @AppStorage("purchaseSubscription") var dateSubscribed:String = Date().ISO8601Format()
     @AppStorage("didSubscribe") var didSubscribeStorage: Bool = false
     
     private let productIds = ["01","03"]
@@ -74,7 +76,12 @@ class PurchaseManager: ObservableObject {
             await self.updatePurchasedProducts()
             if product.id == "03" {
                 didPurchaseStorage = true
+                datePurchased = Date().ISO8601Format()
                 updateClientStatus(newStatus: .activeCore)
+            } else if product.id == "01" {
+                didSubscribeStorage = true
+                dateSubscribed = Date().ISO8601Format()
+                updateClientStatus(newStatus: .activeSubscription)
             }
         case .success(.unverified(_, _)):
             break
@@ -118,5 +125,34 @@ class PurchaseManager: ObservableObject {
             }
         }
     }
+    
+    
+    
+    // Date formatting funcs
+    func check20Secs(purchaseDate:String) -> Bool {
+        let dateFormatter = ISO8601DateFormatter()
+        let purchaseDateFormatted = dateFormatter.date(from: purchaseDate)
+        let calendar = Calendar.current
+        let currentDateFormatted = dateFormatter.date(from: Date().ISO8601Format())
+        let seconds = calendar.dateComponents([.second], from: purchaseDateFormatted!, to: currentDateFormatted!).second
+        
+        // More than 20 secs have passed, throw ask to subscribe
+        if seconds! >= 20 {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func hoursLater(startDate: Date, hoursLater: Int) -> String {
+        let newFormat = DateFormatter()
+        newFormat.dateFormat = "h a"
+        let newDate = Calendar.current.date(byAdding: .hour, value: hoursLater, to: startDate)!
+        
+        return newFormat.string(from: newDate)
+    }
+    
+    
+    
     
 }
