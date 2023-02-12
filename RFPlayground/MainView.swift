@@ -16,6 +16,7 @@ struct MainView: View {
     let staticWeekDay = ["Sun", "Sat", "Fri", "Thur", "Wed", "Tue", "Mon", "Sun", "Sat", "Fri"]
     let staticWeekNum = ["29", "28", "27", "26", "25", "24", "23", "22", "21", "20"]
     let daysDisplayed = [0,1,2,3,4,5,6,7,8,9,10,11,12,13]
+    @State var thirtyDayFifteenMinTuple:[(sectionTime: Date, sectionStatus: Bool)] = [(sectionTime: Date, sectionStatus: Bool)]()
     let twoHourContainerHeight = 45
     
     var body: some View {
@@ -36,7 +37,7 @@ struct MainView: View {
                         .background(Color.red)
                     VStack(spacing: 0) {
                         ForEach(Array(staticTimes.enumerated()), id: \.offset) { index, element in
-                            Text(PurchaseManager().hoursLater(startDate: Date(), hoursLater: element)).foregroundColor(Color.white).frame(height: CGFloat(twoHourContainerHeight))
+                            Text(PurchaseManager().hoursLater(startDate: Date(), hoursLater: -element)).foregroundColor(Color.white).frame(height: CGFloat(twoHourContainerHeight))
                         }
                     }
                     Spacer()

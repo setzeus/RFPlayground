@@ -138,7 +138,7 @@ class PurchaseManager: ObservableObject {
         
         // More than 20 secs have passed, throw ask to subscribe
         if seconds! >= 20 {
-            return true
+            return true 
         } else {
             return false
         }
