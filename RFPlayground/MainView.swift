@@ -9,15 +9,15 @@ import SwiftUI
 
 struct MainView: View {
     
-    @State var calendarDays:[Date] = [Date(),Date(),Date(),Date(),Date(),Date(),Date(),Date(),Date(),Date(),Date(),Date(),Date(),Date()]
-    @State var calendarDaysE:[String] = Array(repeating: "", count: 14)
-    @State var calendarDaysD:[String] = Array(repeating: "", count: 14)
+    @State var calendarDays:[Date] = Array(repeating: Date(), count: 30)
+    @State var calendarDaysE:[String] = Array(repeating: "", count: 30)
+    @State var calendarDaysD:[String] = Array(repeating: "", count: 30)
     let staticTimes = [0,2,4,6,8,10,12,14,16,18,20,22]
-    let staticWeekDay = ["Sun", "Sat", "Fri", "Thur", "Wed", "Tue", "Mon", "Sun", "Sat", "Fri"]
-    let staticWeekNum = ["29", "28", "27", "26", "25", "24", "23", "22", "21", "20"]
     let daysDisplayed = [0,1,2,3,4,5,6,7,8,9,10,11,12,13]
     @State var thirtyDayFifteenMinTuple:[(sectionTime: Date, sectionStatus: Bool)] = [(sectionTime: Date, sectionStatus: Bool)]()
     let twoHourContainerHeight = 45
+    
+    //
     
     var body: some View {
         // View Container
@@ -52,7 +52,7 @@ struct MainView: View {
                     // Vstack -> fixed title (day)
                     // Body -> hourly time slots
                     HStack(spacing: 0) {
-                        ForEach(daysDisplayed, id: \.self) { i in
+                        ForEach(Array(calendarDays.enumerated()), id: \.offset) { i, element in
                                 
                             VStack(spacing: 0) {
                                     
@@ -69,6 +69,7 @@ struct MainView: View {
                                     // 2 Hour Container
                                     ForEach(staticTimes, id: \.self) {time in
                                         if time == staticTimes.last {
+                                            // Every two hour container should receive an array of 8 elements (tuple)
                                             TwoHourContainerView(twoHourContainerHeight: CGFloat(twoHourContainerHeight), twoHourStartTime: Date())
                                             
                                         } else {
@@ -93,13 +94,21 @@ struct MainView: View {
                 .background(Color.blue)
                 .padding(.bottom, 24)
         }.onAppear {
+            
+            // Now
             let today = Date()
             let calendar = Calendar.current
+            
+            // Formats
             let dateFormatterE = DateFormatter()
             dateFormatterE.dateFormat = "E"
             let dateFormatterD = DateFormatter()
             dateFormatterD.dateFormat = "d"
-            for i in 0...13 {
+            
+            // Initialize 15-min sessions for the last 30 days, round to the previous 5 mins
+            thirtyDayFifteenMinTuple = PurchaseManager().initializeLastThirtyDaysFifteenMinTuple()
+            
+            for i in 0...29 {
                 calendarDays[i] = calendar.date(byAdding: .day, value: -i, to: today) ?? Date()
                 calendarDaysE[i] = dateFormatterE.string(from: calendarDays[i])
                 calendarDaysD[i] = dateFormatterD.string(from: calendarDays[i])

@@ -128,7 +128,27 @@ class PurchaseManager: ObservableObject {
     
     
     
-    // Date formatting funcs
+    // Date Functions
+    
+    // Initialize last 30 days, 15 minute intervals tuple
+    func initializeLastThirtyDaysFifteenMinTuple() -> [(sectionTime: Date, sectionStatus: Bool)] {
+        // Current Calendar initialize
+        let calendar = Calendar.current
+        // Grab Now()'s minutes
+        let minutes = calendar.component(.minute, from: Date())
+        // Round minutes to the most recent 5 minute mark
+        let roundedMinutes = minutes - (minutes % 5)
+        // Set rounded date
+        let roundedDate = calendar.date(bySetting: .minute, value: roundedMinutes, of: Date())!
+        // Create date 30 days ago
+        let thirtyDaysAgo = calendar.date(byAdding: .day, value: -30, to: roundedDate)!
+        let thirtyDaysAgoTimes = (0...2879).map { calendar.date(byAdding: .minute, value: $0*15, to: thirtyDaysAgo)! }
+        let setTuple = thirtyDaysAgoTimes.map { (sectionTime: $0, sectionStatus: false) }
+        print(setTuple)
+        return setTuple
+    }
+    
+    // Formatting
     func check20Secs(purchaseDate:String) -> Bool {
         let dateFormatter = ISO8601DateFormatter()
         let purchaseDateFormatted = dateFormatter.date(from: purchaseDate)
@@ -138,7 +158,7 @@ class PurchaseManager: ObservableObject {
         
         // More than 20 secs have passed, throw ask to subscribe
         if seconds! >= 20 {
-            return true 
+            return true
         } else {
             return false
         }
