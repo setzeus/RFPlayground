@@ -130,19 +130,14 @@ class PurchaseManager: ObservableObject {
     
     // Date Functions
     
-    // Initialize last 30 days, 15 minute intervals tuple
-    func initializeLastThirtyDaysFifteenMinTuple() -> [(sectionTime: Date, sectionStatus: Bool)] {
+    // Initialize last 30 days, 5 minute intervals tuple (30 days * 24 hours * 12 5-min intervals = 8640)
+    func initializeLastThirtyDaysEveryMinTuple(startDate: Date) -> [(sectionTime: Date, sectionStatus: Bool)] {
         // Current Calendar initialize
         let calendar = Calendar.current
         // Grab Now()'s minutes
         let minutes = calendar.component(.minute, from: Date())
-        // Round minutes to the most recent 5 minute mark
-        let roundedMinutes = minutes - (minutes % 5)
-        // Set rounded date
-        let roundedDate = calendar.date(bySetting: .minute, value: roundedMinutes, of: Date())!
-        // Create date 30 days ago
-        let thirtyDaysAgo = calendar.date(byAdding: .day, value: -30, to: roundedDate)!
-        let thirtyDaysAgoTimes = (0...2879).map { calendar.date(byAdding: .minute, value: $0*15, to: thirtyDaysAgo)! }
+        let thirtyDaysAgo = calendar.date(byAdding: .day, value: -30, to: startDate)!
+        let thirtyDaysAgoTimes = (1...8640).map { calendar.date(byAdding: .minute, value: $0*5, to: thirtyDaysAgo)! }
         let setTuple = thirtyDaysAgoTimes.map { (sectionTime: $0, sectionStatus: false) }
         print(setTuple)
         return setTuple

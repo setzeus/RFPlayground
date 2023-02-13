@@ -12,6 +12,10 @@ struct MainView: View {
     @State var calendarDays:[Date] = Array(repeating: Date(), count: 30)
     @State var calendarDaysE:[String] = Array(repeating: "", count: 30)
     @State var calendarDaysD:[String] = Array(repeating: "", count: 30)
+    @State var loadTime = Date()
+    @State var startDate:Date = Date()
+    @State var endDate:Date = Date()
+    @State var datesReady:Bool = false
     let staticTimes = [0,2,4,6,8,10,12,14,16,18,20,22]
     let daysDisplayed = [0,1,2,3,4,5,6,7,8,9,10,11,12,13]
     @State var thirtyDayFifteenMinTuple:[(sectionTime: Date, sectionStatus: Bool)] = [(sectionTime: Date, sectionStatus: Bool)]()
@@ -23,7 +27,26 @@ struct MainView: View {
         // View Container
         
         VStack {
-            Text("Calendar View").font(.title2)
+            
+            HStack {
+                if endDate != loadTime {
+                    Button(action: {
+                        
+                    }, label: {
+                        Text("Test Date Overlay")
+                            .font(.title3)
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(.purple)
+                            .clipShape(Capsule())
+                    })
+                } else {
+                    DatePicker("", selection: $startDate, displayedComponents: .hourAndMinute)
+                    Text("Calendar").font(.title2)
+                    DatePicker("", selection: $endDate, displayedComponents: .hourAndMinute)
+                }
+               
+            }
             
             // Main Container
             HStack {
@@ -105,8 +128,14 @@ struct MainView: View {
             let dateFormatterD = DateFormatter()
             dateFormatterD.dateFormat = "d"
             
+            loadTime = Date()
+            endDate = loadTime
+            startDate = loadTime
+            
             // Initialize 15-min sessions for the last 30 days, round to the previous 5 mins
-            thirtyDayFifteenMinTuple = PurchaseManager().initializeLastThirtyDaysFifteenMinTuple()
+            thirtyDayFifteenMinTuple = PurchaseManager().initializeLastThirtyDaysEveryMinTuple(startDate: startDate)
+            
+            
             
             for i in 0...29 {
                 calendarDays[i] = calendar.date(byAdding: .day, value: -i, to: today) ?? Date()
