@@ -31,10 +31,11 @@ struct MainView: View {
         VStack {
             
             HStack {
-                if endDate != loadTime {
+                if datesReady {
                     Button(action: {
                         print(startDate)
                         print(endDate)
+                        calendarManager.updateLastTwoWeeksFiveMinContainer(sessionStartTime: startDate, sessionEndTime: endDate)
                     }, label: {
                         Text("Test Date Overlay")
                             .font(.title3)
@@ -47,6 +48,11 @@ struct MainView: View {
                     DatePicker("", selection: $startDate, displayedComponents: .hourAndMinute)
                     Text("Calendar").font(.title2)
                     DatePicker("", selection: $endDate, displayedComponents: .hourAndMinute)
+                    Button(action: {
+                        datesReady = true
+                    }, label: {
+                        Text("Go")
+                    })
                 }
                
             }

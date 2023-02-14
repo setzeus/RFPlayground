@@ -42,6 +42,23 @@ final class CalendarManager: ObservableObject {
         thiryDayFiveMinArray = setTuple
     }
     
+    // Function to parse two submitted timestamps & update the twoWeekFiveMinArray accordingly
+    func updateLastTwoWeeksFiveMinContainer(sessionStartTime: Date, sessionEndTime: Date) {
+        let calendar = Calendar.current
+        let minutes = calendar.dateComponents([.minute], from: sessionStartTime, to: sessionEndTime).minute
+        print(minutes)
+        let times = (0...minutes!/5).map { calendar.date(byAdding: .minute, value: $0*5, to: sessionStartTime)! }
+        print(times)
+        thiryDayFiveMinArray = thiryDayFiveMinArray.map { (container: FiveMinContainer) -> FiveMinContainer in
+            if times.contains(where: { $0 == container.sectionTime }) {
+                print(FiveMinContainer(sectionTime: container.sectionTime, sectionStatus: true))
+                return FiveMinContainer(sectionTime: container.sectionTime, sectionStatus: true)
+            } else {
+                return container
+            }
+        }
+    }
+    
     func hoursLater(startDate: Date, hoursLater: Int) -> String {
         let newFormat = DateFormatter()
         newFormat.dateFormat = "h a"
