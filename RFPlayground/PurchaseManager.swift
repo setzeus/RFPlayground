@@ -19,6 +19,39 @@ enum ClientStatus: String, Codable {
          graceSubscription
 }
 
+struct FiveMinContainer: Identifiable {
+    var id: UUID = UUID()
+    var sectionTime: Date
+    var sectionStatus: Bool
+}
+
+final class CalendarManager: ObservableObject {
+    
+    @Published var thiryDayFiveMinArray:[FiveMinContainer] = [FiveMinContainer]()
+    
+    // Initialize last 30 days, 5 minute intervals tuple (30 days * 24 hours * 12 5-min intervals = 8640)
+    func initializeLastThirtyDaysEveryMinTuple(startDate: Date) {
+        // Current Calendar initialize
+        let calendar = Calendar.current
+        // Grab minute components
+        let minutes = calendar.component(.minute, from: Date())
+        let thirtyDaysAgo = calendar.date(byAdding: .day, value: -14, to: startDate)!
+        let thirtyDaysAgoTimes = (1...4031).map { calendar.date(byAdding: .minute, value: $0*5, to: thirtyDaysAgo)! }
+        let setTuple = thirtyDaysAgoTimes.map { FiveMinContainer(sectionTime: $0, sectionStatus: false) }
+        print(thiryDayFiveMinArray)
+        thiryDayFiveMinArray = setTuple
+    }
+    
+    func hoursLater(startDate: Date, hoursLater: Int) -> String {
+        let newFormat = DateFormatter()
+        newFormat.dateFormat = "h a"
+        let newDate = Calendar.current.date(byAdding: .hour, value: hoursLater, to: startDate)!
+        
+        return newFormat.string(from: newDate)
+    }
+    
+}
+
 @MainActor
 class PurchaseManager: ObservableObject {
     
@@ -37,6 +70,7 @@ class PurchaseManager: ObservableObject {
     @Published private(set) var purchasedProductIDs = Set<String>()
     @Published var didConsult = false
     @Published var status:ClientStatus = .neverConsulted
+    @Published var thirtyDayFiveMinTuple:[(sectionTime: Date, sectionStatus: Bool)] = [(sectionTime: Date, sectionStatus: Bool)]()
     
     init() {
         
@@ -130,19 +164,6 @@ class PurchaseManager: ObservableObject {
     
     // Date Functions
     
-    // Initialize last 30 days, 5 minute intervals tuple (30 days * 24 hours * 12 5-min intervals = 8640)
-    func initializeLastThirtyDaysEveryMinTuple(startDate: Date) -> [(sectionTime: Date, sectionStatus: Bool)] {
-        // Current Calendar initialize
-        let calendar = Calendar.current
-        // Grab Now()'s minutes
-        let minutes = calendar.component(.minute, from: Date())
-        let thirtyDaysAgo = calendar.date(byAdding: .day, value: -30, to: startDate)!
-        let thirtyDaysAgoTimes = (1...8640).map { calendar.date(byAdding: .minute, value: $0*5, to: thirtyDaysAgo)! }
-        let setTuple = thirtyDaysAgoTimes.map { (sectionTime: $0, sectionStatus: false) }
-        print(setTuple)
-        return setTuple
-    }
-    
     // Formatting
     func check20Secs(purchaseDate:String) -> Bool {
         let dateFormatter = ISO8601DateFormatter()
@@ -157,14 +178,6 @@ class PurchaseManager: ObservableObject {
         } else {
             return false
         }
-    }
-    
-    func hoursLater(startDate: Date, hoursLater: Int) -> String {
-        let newFormat = DateFormatter()
-        newFormat.dateFormat = "h a"
-        let newDate = Calendar.current.date(byAdding: .hour, value: hoursLater, to: startDate)!
-        
-        return newFormat.string(from: newDate)
     }
     
     
