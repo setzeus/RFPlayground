@@ -49,7 +49,7 @@ struct MainView: View {
                     Text("Calendar").font(.title2)
                     DatePicker("", selection: $endDate, displayedComponents: .hourAndMinute)
                     Button(action: {
-                        datesReady = true
+                        datesReady = true {
                     }, label: {
                         Text("Go")
                     })

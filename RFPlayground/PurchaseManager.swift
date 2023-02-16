@@ -21,7 +21,8 @@ enum ClientStatus: String, Codable {
 
 struct FiveMinContainer: Identifiable {
     var id: UUID = UUID()
-    var sectionTime: Date
+    var sectionStartTime: Date
+    var sectionDateRange: ClosedRange<Date>
     var sectionStatus: Bool
 }
 
@@ -37,7 +38,7 @@ final class CalendarManager: ObservableObject {
         let minutes = calendar.component(.minute, from: Date())
         let thirtyDaysAgo = calendar.date(byAdding: .day, value: -14, to: startDate)!
         let thirtyDaysAgoTimes = (1...4031).map { calendar.date(byAdding: .minute, value: $0*5, to: thirtyDaysAgo)! }
-        let setTuple = thirtyDaysAgoTimes.map { FiveMinContainer(sectionTime: $0, sectionStatus: false) }
+        let setTuple = thirtyDaysAgoTimes.map { FiveMinContainer(sectionStartTime: $0, sectionDateRange: $0...calendar.date(byAdding: .minute, value: 5, to: $0)!, sectionStatus: false) }
         print(thiryDayFiveMinArray)
         thiryDayFiveMinArray = setTuple
     }
@@ -50,11 +51,13 @@ final class CalendarManager: ObservableObject {
         let times = (0...minutes!/5).map { calendar.date(byAdding: .minute, value: $0*5, to: sessionStartTime)! }
         print(times)
         thiryDayFiveMinArray = thiryDayFiveMinArray.map { (container: FiveMinContainer) -> FiveMinContainer in
-            if times.contains(where: { $0 == container.sectionTime }) {
-                print(FiveMinContainer(sectionTime: container.sectionTime, sectionStatus: true))
-                return FiveMinContainer(sectionTime: container.sectionTime, sectionStatus: true)
-            } else {
-                return container
+            ForEach(times, id: \.self) {
+                if container.sectionDateRange.contains(times) {
+                    print(FiveMinContainer(sectionStartTime: container.sectionStartTime, sectionDateRange: container.sectionDateRange, sectionStatus: true))
+                    return FiveMinContainer(sectionStartTime: container.sectionStartTime, sectionDateRange: container.sectionDateRange, sectionStatus: true)
+                } else {
+                    return container
+                }
             }
         }
     }
