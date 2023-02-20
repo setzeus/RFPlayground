@@ -45,14 +45,23 @@ struct MainView: View {
                             .clipShape(Capsule())
                     })
                 } else {
-                    DatePicker("", selection: $startDate, displayedComponents: .hourAndMinute)
-                    Text("Calendar").font(.title2)
-                    DatePicker("", selection: $endDate, displayedComponents: .hourAndMinute)
-                    Button(action: {
-                        datesReady = true {
-                    }, label: {
-                        Text("Go")
-                    })
+                    VStack {
+                        HStack{
+                            Spacer()
+                            DatePicker("", selection: $startDate)
+                            Spacer()
+                        }
+                        HStack{
+                            Spacer()
+                            DatePicker("", selection: $endDate)
+                            Spacer()
+                        }
+                        Button(action: {
+                            datesReady = true
+                        }, label: {
+                            Text("Go")
+                        })
+                    }
                 }
                
             }
@@ -99,16 +108,28 @@ struct MainView: View {
                                 ForEach(Array(calendarManager.thiryDayFiveMinArray.enumerated()), id: \.offset) { j, f in
                                     if j >= 288*i && j < 288*(i+1) {
                                         if j == 288*i {
-                                            Rectangle().fill(calendarManager.thiryDayFiveMinArray[j].sectionStatus == true ? .black : .clear).frame(height: CGFloat(1.875))
+                                            if (calendarManager.thiryDayFiveMinArray[j].sectionStatus == true) {
+                                                Rectangle().fill(.black).frame(height: CGFloat(1.875))
+                                            } else {
+                                                Rectangle().fill(.clear).frame(height: CGFloat(1.875))
+                                            }
                                         } else {
                                             if j%24 == 0 {
                                                 VStack(spacing: 0) {
                                                     Divider().overlay(Color.white).frame(height: 0.1)
-                                                    Rectangle().fill(calendarManager.thiryDayFiveMinArray[j].sectionStatus == true ? .black : .clear).frame(height: CGFloat(1.875))
+                                                    if (calendarManager.thiryDayFiveMinArray[j].sectionStatus == true) {
+                                                        Rectangle().fill(.black).frame(height: CGFloat(1.875))
+                                                    } else {
+                                                        Rectangle().fill(.clear).frame(height: CGFloat(1.875))
+                                                    }
                                                 }
                                             } else {
                                                 VStack(spacing: 0) {
-                                                    Rectangle().fill(calendarManager.thiryDayFiveMinArray[j].sectionStatus == true ? .black : .clear).frame(height: CGFloat(1.875))
+                                                    if (calendarManager.thiryDayFiveMinArray[j].sectionStatus == true) {
+                                                        Rectangle().fill(.black).frame(height: CGFloat(1.875))
+                                                    } else {
+                                                        Rectangle().fill(.clear).frame(height: CGFloat(1.875))
+                                                    }
                                                 }
                                             }
                                         }

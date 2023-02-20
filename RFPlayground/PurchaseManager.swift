@@ -39,7 +39,7 @@ final class CalendarManager: ObservableObject {
         let thirtyDaysAgo = calendar.date(byAdding: .day, value: -14, to: startDate)!
         let thirtyDaysAgoTimes = (1...4031).map { calendar.date(byAdding: .minute, value: $0*5, to: thirtyDaysAgo)! }
         let setTuple = thirtyDaysAgoTimes.map { FiveMinContainer(sectionStartTime: $0, sectionDateRange: $0...calendar.date(byAdding: .minute, value: 5, to: $0)!, sectionStatus: false) }
-        print(thiryDayFiveMinArray)
+        //print(thiryDayFiveMinArray)
         thiryDayFiveMinArray = setTuple
     }
     
@@ -47,19 +47,19 @@ final class CalendarManager: ObservableObject {
     func updateLastTwoWeeksFiveMinContainer(sessionStartTime: Date, sessionEndTime: Date) {
         let calendar = Calendar.current
         let minutes = calendar.dateComponents([.minute], from: sessionStartTime, to: sessionEndTime).minute
-        print(minutes)
+        //print(minutes)
         let times = (0...minutes!/5).map { calendar.date(byAdding: .minute, value: $0*5, to: sessionStartTime)! }
-        print(times)
-        thiryDayFiveMinArray = thiryDayFiveMinArray.map { (container: FiveMinContainer) -> FiveMinContainer in
-            ForEach(times, id: \.self) {
-                if container.sectionDateRange.contains(times) {
-                    print(FiveMinContainer(sectionStartTime: container.sectionStartTime, sectionDateRange: container.sectionDateRange, sectionStatus: true))
-                    return FiveMinContainer(sectionStartTime: container.sectionStartTime, sectionDateRange: container.sectionDateRange, sectionStatus: true)
-                } else {
-                    return container
+        //print(times)
+        for time in times {
+            for(index, container) in thiryDayFiveMinArray.enumerated() {
+                if container.sectionDateRange.contains(time) {
+                    print("this should be represented: \(thiryDayFiveMinArray[index])")
+                    thiryDayFiveMinArray[index].sectionStatus = true
                 }
             }
         }
+        thiryDayFiveMinArray.reverse()
+        print(thiryDayFiveMinArray)
     }
     
     func hoursLater(startDate: Date, hoursLater: Int) -> String {
