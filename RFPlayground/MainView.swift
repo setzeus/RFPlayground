@@ -45,26 +45,30 @@ struct MainView: View {
                             .clipShape(Capsule())
                     })
                 } else {
+                    Spacer()
                     VStack {
                         HStack{
                             Spacer()
+                            Text("Start Time")
                             DatePicker("", selection: $startDate)
                             Spacer()
                         }
                         HStack{
                             Spacer()
+                            Text("End Time")
                             DatePicker("", selection: $endDate)
                             Spacer()
                         }
                         Button(action: {
-                            datesReady = true
+                            calendarManager.updateLastTwoWeeksFiveMinContainer(sessionStartTime: startDate, sessionEndTime: endDate)
                         }, label: {
                             Text("Go")
                         })
                     }
+                    Spacer()
                 }
                
-            }
+            }.padding(.top,16).background(Color(red: 0.98, green: 0.98, blue: 0.98)).frame(maxWidth: .infinity)
             
             // Main Container
             HStack {
@@ -77,7 +81,7 @@ struct MainView: View {
                     }.frame(height: 46)
                     ForEach(Array(staticTimes.enumerated()), id: \.offset) { index, element in
                         VStack {
-                            Text(calendarManager.hoursLater(startDate: Date(), hoursLater: -element)).foregroundColor(Color.white).padding(.top, 5)
+                            Text(calendarManager.hoursLater(startDate: Date(), hoursLater: -element)).padding(.top, 5)
                             Spacer()
                         }.frame(height: CGFloat(twoHourContainerHeight))
                     }
@@ -98,10 +102,10 @@ struct MainView: View {
                                 VStack {
                                     Text("\(calendarDaysE[i])")
                                         .fontWeight(.semibold)
-                                        .foregroundColor(.white).padding(.horizontal)
+                                        .padding(.horizontal)
                                     Text("\(calendarDaysD[i])")
-                                        .foregroundColor(.white).padding(.horizontal)
-                                    Divider().overlay(Color.white).frame(maxWidth: .infinity)
+                                        .padding(.horizontal)
+                                    Divider().overlay(Color.gray).frame(maxWidth: .infinity)
                                 }.frame(height: 60)
                                 
                                 // The 288 5-minute segments for eacn day
@@ -109,16 +113,16 @@ struct MainView: View {
                                     if j >= 288*i && j < 288*(i+1) {
                                         if j == 288*i {
                                             if (calendarManager.thiryDayFiveMinArray[j].sectionStatus == true) {
-                                                Rectangle().fill(.black).frame(height: CGFloat(1.875))
+                                                Rectangle().fill(Color(red: 0.4, green: 0.345, blue: 0.792)).frame(height: CGFloat(1.875))
                                             } else {
                                                 Rectangle().fill(.clear).frame(height: CGFloat(1.875))
                                             }
                                         } else {
                                             if j%24 == 0 {
                                                 VStack(spacing: 0) {
-                                                    Divider().overlay(Color.white).frame(height: 0.1)
+                                                    Divider().overlay(Color.gray).frame(height: 0.1)
                                                     if (calendarManager.thiryDayFiveMinArray[j].sectionStatus == true) {
-                                                        Rectangle().fill(.black).frame(height: CGFloat(1.875))
+                                                        Rectangle().fill(Color(red: 0.4, green: 0.345, blue: 0.792)).frame(height: CGFloat(1.875))
                                                     } else {
                                                         Rectangle().fill(.clear).frame(height: CGFloat(1.875))
                                                     }
@@ -126,7 +130,7 @@ struct MainView: View {
                                             } else {
                                                 VStack(spacing: 0) {
                                                     if (calendarManager.thiryDayFiveMinArray[j].sectionStatus == true) {
-                                                        Rectangle().fill(.black).frame(height: CGFloat(1.875))
+                                                        Rectangle().fill(Color(red: 0.4, green: 0.345, blue: 0.792)).frame(height: CGFloat(1.875))
                                                     } else {
                                                         Rectangle().fill(.clear).frame(height: CGFloat(1.875))
                                                     }
@@ -144,9 +148,8 @@ struct MainView: View {
                     
                 }
                 Spacer()
-            }.frame(maxHeight: .infinity)
-                .background(Color.blue)
-                .padding(.bottom, 24)
+            }
+                .background(Color.white)
         }.onAppear {
             
             // Now

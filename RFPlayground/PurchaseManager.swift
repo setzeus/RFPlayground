@@ -29,6 +29,7 @@ struct FiveMinContainer: Identifiable {
 final class CalendarManager: ObservableObject {
     
     @Published var thiryDayFiveMinArray:[FiveMinContainer] = [FiveMinContainer]()
+    private var thiryDayFiveMinArrayUpdateCounter = 1
     
     // Initialize last 30 days, 5 minute intervals tuple (30 days * 24 hours * 12 5-min intervals = 8640)
     func initializeLastThirtyDaysEveryMinTuple(startDate: Date) {
@@ -53,13 +54,19 @@ final class CalendarManager: ObservableObject {
         for time in times {
             for(index, container) in thiryDayFiveMinArray.enumerated() {
                 if container.sectionDateRange.contains(time) {
-                    print("this should be represented: \(thiryDayFiveMinArray[index])")
+                    //print("this should be represented: \(thiryDayFiveMinArray[index])")
                     thiryDayFiveMinArray[index].sectionStatus = true
                 }
             }
         }
-        thiryDayFiveMinArray.reverse()
-        print(thiryDayFiveMinArray)
+        print(thiryDayFiveMinArrayUpdateCounter)
+        if thiryDayFiveMinArrayUpdateCounter == 1 {
+            thiryDayFiveMinArray.reverse()
+        } else {
+            //thiryDayFiveMinArray.reverse()
+        }
+        thiryDayFiveMinArrayUpdateCounter = thiryDayFiveMinArrayUpdateCounter+1
+        //print(thiryDayFiveMinArray)
     }
     
     func hoursLater(startDate: Date, hoursLater: Int) -> String {
