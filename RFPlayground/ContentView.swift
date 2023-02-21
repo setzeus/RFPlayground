@@ -18,7 +18,6 @@ struct ContentView: View {
     // 5.B Not subscribed  -> re-subscribe button
     
     @EnvironmentObject private var purchaseManager:PurchaseManager
-
     
     var body: some View {
         VStack(spacing: 20) {
@@ -37,11 +36,17 @@ struct ContentView: View {
                         VStack {
                             Spacer()
                             Text("Active Client - Core")
-                                .fontWeight(.heavy)
-                                .font(.title2)
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                                .lineLimit(2)
                                 .multilineTextAlignment(.center)
-                            Text("An active client currently in the two-week Core program.")
-                                .multilineTextAlignment(.center)
+                                .foregroundColor(Color("RF2Text"))
+                            Spacer()
+                            VStack {
+                                
+                                Text("An active client currently in the two-week Core program.")
+                                    .multilineTextAlignment(.center)
+                            }
                             Spacer()
                             Button(action: {
                                 purchaseManager.updateClientStatus(newStatus: .inactiveSubscriptionShort)
@@ -183,17 +188,36 @@ struct ContentView: View {
 struct NeverConsultedView: View {
     
     @ObservedObject var purchaseManager:PurchaseManager
+    @State private var neverConsultedWalkthroughCounter = 0
+    let walkthroughTitle:[String] = ["Constant Coach Care","Educational Content","Community of Moms"]
+    let walkthroughDescription:[String] = ["Constant on-coach connection with your assigned coach. Through text or video chat","Access to a library of Restfully-created early childhood development resources","Become an active part of a coach-led community of moms also finding their way."]
     
     var body: some View {
         VStack {
             Spacer()
-            Text("Never Been A Client Nor Consulted")
-                .fontWeight(.heavy)
-                .font(.title2)
+            Text("Start Your Care Support")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .lineLimit(2)
                 .multilineTextAlignment(.center)
-            Text("A new download that did not consult on the website & therefore has access to scheduling a single consult. \n \n Or of course they immediately buy the core Restfully Care package.")
-                .multilineTextAlignment(.center)
+                .foregroundColor(Color("RF2Text"))
             Spacer()
+            VStack {
+                Text(walkthroughTitle[neverConsultedWalkthroughCounter])
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(Color("RF2Text"))
+                Text(walkthroughDescription[neverConsultedWalkthroughCounter])
+                    .multilineTextAlignment(.center)
+            }
+            Spacer()
+            VStack {
+                Image()
+                HStack {
+                    // dots go here
+                }
+            }
             Button(action: {
                 purchaseManager.didConsultStorage = true
                 purchaseManager.updateClientStatus(newStatus: .neverBought)
