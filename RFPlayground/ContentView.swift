@@ -179,7 +179,9 @@ struct ContentView: View {
                     print(error)
                 }
             }
-        }
+        }.background(Image("RFDummyBackground").resizable())
+        .ignoresSafeArea(.all)
+        .frame(width: UIScreen.main.bounds.width, height: .infinity)
     }
 
     
@@ -191,70 +193,99 @@ struct NeverConsultedView: View {
     @State private var neverConsultedWalkthroughCounter = 0
     let walkthroughTitle:[String] = ["Constant Coach Care","Educational Content","Community of Moms"]
     let walkthroughDescription:[String] = ["Constant on-coach connection with your assigned coach. Through text or video chat","Access to a library of Restfully-created early childhood development resources","Become an active part of a coach-led community of moms also finding their way."]
+    let featureImage:[String] = ["featureImage0","featureImage1", "featureImage2"]
     
     var body: some View {
         VStack {
             Spacer()
+            // Header, not carousel
             Text("Start Your Care Support")
                 .font(.largeTitle)
                 .fontWeight(.bold)
                 .lineLimit(2)
                 .multilineTextAlignment(.center)
                 .foregroundColor(Color("RF2Text"))
+                .padding(.horizontal, 16)
+            
             Spacer()
+
+            // Carousel here
+            Button(action: {
+                if neverConsultedWalkthroughCounter == 2 {
+                    neverConsultedWalkthroughCounter = 0
+                } else {
+                    neverConsultedWalkthroughCounter = neverConsultedWalkthroughCounter + 1
+                }
+            }, label: {
+                VStack {
+                    Text(walkthroughTitle[neverConsultedWalkthroughCounter])
+                        .font(.title3)
+                        .fontWeight(.bold)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(Color("RF2Text"))
+                    Text(walkthroughDescription[neverConsultedWalkthroughCounter])
+                        .multilineTextAlignment(.center)
+                    Image(featureImage[neverConsultedWalkthroughCounter])
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 192, height: 192)
+                    // dot indicators here
+                }.padding(.horizontal, 56)
+            }).buttonStyle(PlainButtonStyle())
+            
+            Spacer()
+            
             VStack {
-                Text(walkthroughTitle[neverConsultedWalkthroughCounter])
-                    .font(.subheadline)
+                //Spacer()
+                Text("Rest Care - $400")
+                    .font(.title3)
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
                     .foregroundColor(Color("RF2Text"))
-                Text(walkthroughDescription[neverConsultedWalkthroughCounter])
-                    .multilineTextAlignment(.center)
-            }
-            Spacer()
-            VStack {
-                Image()
-                HStack {
-                    // dots go here
-                }
-            }
-            Button(action: {
-                purchaseManager.didConsultStorage = true
-                purchaseManager.updateClientStatus(newStatus: .neverBought)
-                //zpurchaseManager.didConsult = true
-            }, label: {
-                Text("Sign Up For Consult")
-                    .foregroundColor(Color.white)
-                    .padding()
-                    .background(Color(red: 0, green: 0, blue: 0.5))
-                    .clipShape(Capsule())
-            })
-            ForEach(purchaseManager.products) { product in
-                
-                if product.id == "03" {
-                    Button(action: {
+                Button(action: {
+                    purchaseManager.didConsultStorage = true
+                    purchaseManager.updateClientStatus(newStatus: .neverBought)
+                    //zpurchaseManager.didConsult = true
+                }, label: {
+                    Text("Complimentary Consult")
+                        .fontWeight(.bold)
+                        .foregroundColor(Color.white)
+                        .padding(.vertical)
+                        .frame(width: 256)
+                        .background(Color("RF2Text"))
+                        .cornerRadius(8)
+                })
+                ForEach(purchaseManager.products) { product in
+                    
+                    if product.id == "03" {
+                        Button(action: {
 
-                        _ = Task<Void, Never> {
-                            do {
-                                try await purchaseManager.purchase(product)
-                            } catch {
-                                print(error)
+                            _ = Task<Void, Never> {
+                                do {
+                                    try await purchaseManager.purchase(product)
+                                } catch {
+                                    print(error)
+                                }
                             }
-                        }
 
 
-                    }, label: {
-                        
-                        Text("Restfully Care - \(product.displayPrice)")
-                            .foregroundColor(Color.white)
-                            .padding()
-                            .background(Color(red: 0, green: 0.5, blue: 0))
-                            .clipShape(Capsule())
-                    })
+                        }, label: {
+                            
+                            Text("Restfully Care - \(product.displayPrice)")
+                                .foregroundColor(Color.white)
+                                .padding()
+                                .background(Color(red: 0.188, green: 0.78, blue: 0.71))
+                                .clipShape(Capsule())
+                        })
+                    }
+                    
                 }
-                
-            }
-            Spacer()
+                Text("This is our core Restfully sleep service - where we assign you a personal coach to get your sleep back in 14 days.")
+                    .fontWeight(.ultraLight)
+                    .multilineTextAlignment(.center)
+                //Spacer()
+            }.padding(.bottom, 96).padding(.top, 32).background(Color.white)
+           // Spacer()
         }
     }
     
